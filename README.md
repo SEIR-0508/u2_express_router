@@ -116,7 +116,7 @@ const controller = require('../controllers/brandController')
 
 //index and show routes for our model
 Router.get('/brands', controller.getBrands)
-Router.get('/brands/:id', controller.getBrandsById)
+Router.get('/brands/:id', controller.getBrandById)
 
 //we may not have these routes yet, but this is how it would look with full CRUD on a model
 Router.post('/brands', controller.createBrand)
