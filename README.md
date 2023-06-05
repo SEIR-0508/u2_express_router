@@ -55,7 +55,7 @@ Router.get('/brands', controller.getBrands)
 Router.get('/brands/:id', controller.getBrandsById)
 
 //we may not have these routes yet, but this is how it would look with full CRUD on a model
-Router.post('/brands'.controller.createBrand)
+Router.post('/brands', controller.createBrand)
 Router.put('/brands/:brand_id', controller.updateBrand)
 Router.delete('/brands/:brand_id', controller.deleteBrand)
 
