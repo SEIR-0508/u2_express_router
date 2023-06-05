@@ -47,16 +47,19 @@ But wait, having that callback function can get annoying... lets take it up one 
 ```js
 
 // routes/brands.js
+const Router = require('express').Router()
+const controller = require('../controllers/brandController')
 
-let express = require('express')
-let brandController = require ('../controllers')
-let router = express.Router()
+//index and show routes for our model
+Router.get('/brands', controller.GetPopularTwerts)
+Router.get('/brands/:id', controller.GetRecentTwerts)
 
-router.get('/brands', brandController.getBrands)
-router.get('/brands/:id', brandController.getBrandById)
+//we may not have these routes yet, but this is how it would look with full CRUD on a model
+Router.post('/brands'.controller.createBrand)
+Router.put('/brands/:brand_id', controller.updateBrand)
+Router.delete('/brands/:brand_id', controller.deleteBrand)
 
-
-export module = router
+module.exports = Router
 ```
 	
 and is mounted like this in our server.js:
@@ -68,39 +71,39 @@ const brandRouter = require('./routes/brands');
 app.use('/brands', brandRouter);
 ```
 
+Note: We will be editing this file once we get past the next step, so hold on, it won't all work yet!
 
+### You Do - 10 Minutes
+Now that we have our Brands router set up, lets do the same for our Products Router. If we don't have the full CRUD functionality for them yet, thats okay, make sure to recognize the patterns that exist in each block!
 
-Another example, let's say you have a `router` object that defines a route like this, pulling another funciton from the controller and attaching it to the route. 
-We now have (at least) 3 files chained together -> a controller, a router, and our Server.js file. This can get a bit confusing at times, which is why we want to keep everything organized and with semantic names
 
 ```js
 // routes/products.js
 
 let express = require('express')
 let router = express.Router()
-let productController = require('../controllers/productController')
+let productController = ...
 
-router.get('/products', productController.getAllProducts)
-```
-	
-and is mounted like this:
-	
-```js
-const productRouter = require('./routes/calendar');
+//our Index route
+router.get('/products', ...)
 
-app.use('/products', calendarRouter);
+//create a Show route for this data model
 ```
 
-
-
+### Attaching our Routes into our App Router
+	
 We are going to take all of our Router files and add them to a new file called AppRouter.js, which should look something like this
 
 routes/AppRouter.js
 ```js
 
+//using this thing called the Router, which is build into express
 const Router = require('express').Router()
+//importing our two individual router files
 const ProductRouter = require('./ProductRouter')
 const BrandRouter = require('./BrandRouter')
+
+//setting up our basic routes
 Router.use('/products', ProductRouter)
 Router.use('/brands', BrandsRouter)
 
@@ -108,3 +111,67 @@ module.exports = Router
 ```
 
 
+### Getting our Server.js file to work
+
+We now need to require our AppRouter into our Server.js file, and Use these routes, which will look something like this!
+
+server.js
+```js
+const express = require('express')
+const app = express()
+const cors = require('cors')
+
+//requiring our AppRouter which holds the individual routes
+const AppRouter = require('./routes/AppRouter')
+
+const PORT = process.env.PORT || 3001
+
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+//creating a landing page
+app.get('/', (req, res) => res.json({ message: 'Server Works' }))
+//creating our API routes. It is common to see /api/ before these routes so that you know which part of your page you are working in, and so that you can have other pages (Login, Register...) that are completely removed from these data points
+app.use('/api', AppRouter)
+app.listen(PORT, () => console.log(`Server Started On Port: ${PORT}`))
+
+```
+
+But wait! Our routes are now redudant! To see our products you'd have to go to `localhost:3001/api/products/products`
+Lets edit our route files and remove those data names, so our routes are much cleaner
+
+Tip - List and Create routes go to our Index routes, Show, Update, and Delete routes go to the Display routes, the ones linked by an ID
+
+### Refactoring BrandsRouter
+
+
+```js
+
+// routes/brands.js
+const Router = require('express').Router()
+const controller = require('../controllers/brandController')
+
+//index and show routes for our model
+Router.get('/', controller.GetPopularTwerts)
+Router.get('//:id', controller.GetRecentTwerts)
+
+Router.post('/'.controller.createBrand)
+Router.put('/:id', controller.updateBrand)
+Router.delete('/id', controller.deleteBrand)
+
+module.exports = Router
+
+```
+
+Lets do the same thing for Products now. Again, which controllers will connect the Index route, and which will go to the Show routes by :id?
+
+
+
+You should now be able to see your data at:
+- localhost:3001/api/products
+- localhost:3001/api/products/:id
+- localhost:3001/api/brands
+- localhost:3001/api/brands/:id
+
+But look how much cleaner your Express ecosystem is, and how much better it will be to work with a team on these!
