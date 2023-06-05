@@ -98,7 +98,7 @@ routes/AppRouter.js
 ```js
 
 //using this thing called the Router, which is build into express
-const Router = require('express').Router()
+const router = express.Router()
 //importing our two individual router files
 const ProductRouter = require('./ProductRouter')
 const BrandRouter = require('./BrandRouter')
@@ -149,7 +149,7 @@ Tip - List and Create routes go to our Index routes, Show, Update, and Delete ro
 ```js
 
 // routes/brands.js
-const Router = require('express').Router()
+const router = express.Router()
 const controller = require('../controllers/brandController')
 
 //index and show routes for our model
