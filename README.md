@@ -1,9 +1,11 @@
-# u2_express_router
+## SEIR 0508
+
+# Express Router
 
 
-In our `first-express` app, we used the `app.get` method to define routes and although it worked, the better practice is to:
+In our first Express apps, we used the `app.get` method to define routes and although it worked, the better practice is to:
 
-- Use Express `router` objects to define routes for a particular purpose or dedicated to a certain data resource such as `todos`.
+- Use Express `router` objects to define routes for a particular purpose or dedicated to a certain data resource such as `tasks`, `cats`, `users`.
 - Create each `router` in its own module from which it is exported.
 - Inside of **server.js** `require` and mount the `router` object in the request pipeline.
 
