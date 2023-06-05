@@ -51,8 +51,8 @@ const Router = require('express').Router()
 const controller = require('../controllers/brandController')
 
 //index and show routes for our model
-Router.get('/brands', controller.GetPopularTwerts)
-Router.get('/brands/:id', controller.GetRecentTwerts)
+Router.get('/brands', controller.getBrands)
+Router.get('/brands/:id', controller.getBrandsById)
 
 //we may not have these routes yet, but this is how it would look with full CRUD on a model
 Router.post('/brands'.controller.createBrand)
@@ -100,8 +100,8 @@ routes/AppRouter.js
 //using this thing called the Router, which is build into express
 const router = express.Router()
 //importing our two individual router files
-const ProductRouter = require('./ProductRouter')
-const BrandRouter = require('./BrandRouter')
+const ProductRouter = require('./productRouter')
+const BrandRouter = require('./brandRouter')
 
 //setting up our basic routes
 Router.use('/products', ProductRouter)
@@ -153,8 +153,8 @@ const router = express.Router()
 const controller = require('../controllers/brandController')
 
 //index and show routes for our model
-Router.get('/', controller.GetPopularTwerts)
-Router.get('//:id', controller.GetRecentTwerts)
+Router.get('/', controller.getBrands)
+Router.get('//:id', controller.getBrandsById)
 
 Router.post('/'.controller.createBrand)
 Router.put('/:id', controller.updateBrand)
