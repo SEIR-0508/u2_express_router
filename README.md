@@ -11,6 +11,8 @@ In our first Express apps, we used the `app.get` method to define routes and alt
 
 > Note:  A **data resource** is a "type" of data/information that applications create, read, update and/or delete (CRUD).
 
+Like our Controllers, Routers are used to encapsulate certain parts of data we want to work with, that will allow us to keep our main folders clean and organized. It also allows people on a team to work on one individual file or folder at a time and push their versions to git, rather than everyone working on one file at once, which as you can imagine, will get messy really quick
+
 ### Best Practice Routing Set Up by Express Generator
 
 As an example of using this better approach to routing, let's look at how `express-generator` sets up routing...
