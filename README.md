@@ -18,7 +18,7 @@ If you do not have your Brands and Products shaped by Controllers yet, here is w
 
 
 ```js
-controllers/brandController.js
+// controllers/brandController.js
 
 const { Brand } = require('../models')
 const brandSchema = require('../models/brand')
@@ -48,7 +48,7 @@ module.exports = {
 ```
 
 ```js
-controllers.productController.js
+//controllers.productController.js
 
 const { Product } = require('../models')
 const productSchema = require('../models/product')
@@ -62,7 +62,7 @@ const getProductById = async (req,res) => {
     try{
     const { id } = req.params
     const product = await Product.findById(id)
-    if(!product) throw Error(product not found')
+    if(!product) throw Error('product not found')
     res.json(product)
     }catch (e){
         console.log(e)
