@@ -25,7 +25,7 @@ const brandSchema = require('../models/brand')
 
 const getBrands = async (req, res)=> {
     const brands = await Brand.find({})
-    res.json(brandSchema)
+    res.json(brands)
 }
 
 const getBrandById = async (req,res) => {
@@ -55,7 +55,7 @@ const productSchema = require('../models/product')
 
 const getProducts = async (req, res)=> {
     const products = await Product.find({})
-    res.json(productSchema)
+    res.json(product)
 }
 
 const getProductById = async (req,res) => {
