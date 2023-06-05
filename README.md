@@ -126,14 +126,6 @@ Router.delete('/brands/:brand_id', controller.deleteBrand)
 module.exports = Router
 ```
 	
-and is mounted like this in our server.js:
-	
-```js
-const brandRouter = require('./routes/brands');
-
-// All routes defined in todosRouter will start with /todos
-app.use('/brands', brandRouter);
-```
 
 Note: We will be editing this file once we get past the next step, so hold on, it won't all work yet!
 
