@@ -161,6 +161,8 @@ We are going to take all of our Router files and add them to a new file called A
 routes/AppRouter.js
 ```js
 
+
+const express = require('express');
 //using this thing called the Router, which is build into express
 const router = express.Router()
 //importing our two individual router files
@@ -212,8 +214,10 @@ Tip - List and Create routes go to our Index routes, Show, Update, and Delete ro
 
 ```js
 
+
 // routes/brands.js
-const router = express.Router()
+const express = require('express');
+const Router = express.Router()
 const controller = require('../controllers/brandController')
 
 //index and show routes for our model
