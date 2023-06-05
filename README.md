@@ -19,107 +19,92 @@ As an example of using this better approach to routing, let's look at how `expre
 
 First, there's a `routes` folder containing two router modules:
 
-- **index.js**: Great for defining general purpose routes, e.g., the root route.
-- **users.js**: An example of a router dedicated to a _data resource_, in this case, _users_. 
+- **AppRouter.js**: Great for defining general purpose routes, e.g., the root route. We can export all our individual routes into an index file and export the index to our Server.js file, like we did with controllers
 
+- **UserRouter.js**: An example of a router dedicated to a _data resource_, in this case, _users_.
 Note how routes are defined on those two `router` objects using `router.get()` method call just like we did previously with `app.get()`
 
 Each `router` object has one route defined - compare those two routes, notice the **HTTP methods** and the **paths**?  They're the same - isn't that a problem?  Nope, they're not actually the same because of the way the routers are mounted in **server.js**...
 
-### Router Objects in the Scaffolded App
 
-The two route modules are required on lines 7 & 8 of `server.js`.
-
-Then those routers are mounted in the middleware pipeline with the `app.use` method on lines 22 & 23:
-
-```js
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-```
-
-> **IMPORTANT KEY POINT:** The path specified in `app.use` is a **"starts with path"**. It is **prepended** to the paths specified in the router object forming the **actual path**.
+> **IMPORTANT KEY POINT:** The path specified in `app.use` is a **"starts with path"**. It is bound to the paths specified in the router object forming the **actual path**.
 
 ### Determining the Actual Path of a Route Defined in a Router Object
 
 Let's say you have a `router` object that defines a route like this:
 
 ```js
-// routes/todos.js
+// routes/brands.js
 
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
-router.get('/', function(req, res) {...
+router.get('/brands', (req, res) => {...
+```
+
+But wait, having that callback function can get annoying... lets take it up one more notch to do something like this
+
+```js
+
+// routes/brands.js
+
+let express = require('express')
+let brandController = require ('../controllers')
+let router = express.Router()
+
+router.get('/brands', brandController.getBrands)
+router.get('/brands/:id', brandController.getBrandById)
+
+
+export module = router
 ```
 	
-and is mounted like this:
+and is mounted like this in our server.js:
 	
 ```js
-const todosRouter = require('./routes/todos');
+const brandRouter = require('./routes/brands');
 
 // All routes defined in todosRouter will start with /todos
-app.use('/todos', todosRouter);
+app.use('/brands', brandRouter);
 ```
 
-<details>
-<summary>
-❓ What is the actual path of the route?
-</summary>
-<hr>
 
-The starts with path is `/todos` and the path of the defined route is just `/` which doesn't change the actual path, thus the actual path is `/todos`
 
-<hr>
-</details>
-
-Another example, let's say you have a `router` object that defines a route like this:
+Another example, let's say you have a `router` object that defines a route like this, pulling another funciton from the controller and attaching it to the route. 
+We now have (at least) 3 files chained together -> a controller, a router, and our Server.js file. This can get a bit confusing at times, which is why we want to keep everything organized and with semantic names
 
 ```js
-// routes/calendar.js
+// routes/products.js
 
-var express = require('express');
-var router = express.Router();
+let express = require('express')
+let router = express.Router()
+let productController = require('../controllers/productController')
 
-router.get('/today', function(req, res) {...
+router.get('/products', productController.getAllProducts)
 ```
 	
 and is mounted like this:
 	
 ```js
-const calendarRouter = require('./routes/calendar');
+const productRouter = require('./routes/calendar');
 
-app.use('/calendar', calendarRouter);
+app.use('/products', calendarRouter);
 ```
 
-<details>
-<summary>
-❓ What is the actual path of the above route?
-</summary>
-<hr>
-
-The starts with path is `/calendar` and the path of the defined route is `/today` making the actual path `/calendar/today`
-
-<hr>
-</details>
 
 
+We are going to take all of our Router files and add them to a new file called AppRouter.js, which should look something like this
 
-- We now want to define the route for the To-Dos **index** functionality (display all To-Dos).  However, we are not going to write an anonymous inline function for the route handler.  Instead, we are going to follow a best practice of putting the function in a controller module that can export any number of controller actions (functions).
+routes/AppRouter.js
+```js
 
-- Here's the route that uses a controller action that we'll code in a bit:
+const Router = require('express').Router()
+const ProductRouter = require('./ProductRouter')
+const BrandRouter = require('./BrandRouter')
+Router.use('/products', ProductRouter)
+Router.use('/brands', BrandsRouter)
 
-	```js
-	// routes/todos.js
+module.exports = Router
+```
 
-	var express = require('express');
-	var router = express.Router();
 
-	// Require the controller that exports To-Do CRUD functions
-	var todosCtrl = require('../controllers/todos');
-
-	// All actual paths begin with "/todos"
-
-	// GET /todos
-	router.get('/', todosCtrl.index);
-	```
-	> Is that route definition tidy or what?!?!
