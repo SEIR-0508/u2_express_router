@@ -13,6 +13,70 @@ In our first Express apps, we used the `app.get` method to define routes and alt
 
 Like our Controllers, Routers are used to encapsulate certain parts of data we want to work with, that will allow us to keep our main folders clean and organized. It also allows people on a team to work on one individual file or folder at a time and push their versions to git, rather than everyone working on one file at once, which as you can imagine, will get messy really quick
 
+
+If you do not have your Brands and Products shaped by Controllers yet, here is what the code should look like...
+
+
+```js
+controllers/brandController.js
+
+const { Brand } = require('../models')
+const brandSchema = require('../models/brand')
+
+const getBrands = async (req, res)=> {
+    const brands = await Brand.find({})
+    res.json(brandSchema)
+}
+
+const getBrandById = async (req,res) => {
+    try{
+    const { id } = req.params
+    const brand = await Brand.findById(id)
+    if(!brand) throw Error('brand not found')
+    res.json(brand)
+    }catch (e){
+        console.log(e)
+        res.send('brand not found')
+    }
+}
+
+module.exports = {
+    getBrands,
+    getBrandById
+}
+
+```
+
+```js
+controllers.productController.js
+
+const { Product } = require('../models')
+const productSchema = require('../models/product')
+
+const getProducts = async (req, res)=> {
+    const products = await Product.find({})
+    res.json(productSchema)
+}
+
+const getProductById = async (req,res) => {
+    try{
+    const { id } = req.params
+    const product = await Product.findById(id)
+    if(!product) throw Error(product not found')
+    res.json(product)
+    }catch (e){
+        console.log(e)
+        res.send('product not found')
+    }
+}
+
+module.exports = {
+    getProducts,
+    getProductById
+}
+
+
+
 ### Best Practice Routing Set Up by Express Generator
 
 As an example of using this better approach to routing, let's look at how `express-generator` sets up routing...
