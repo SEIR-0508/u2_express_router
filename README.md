@@ -79,16 +79,15 @@ module.exports = {
 
 ### Best Practice Routing Set Up by Express Generator
 
-As an example of using this better approach to routing, let's look at how `express-generator` sets up routing...
+As an example of using this better approach to routing, let's look at `express-mongoose` and set up its routes..
 
-First, there's a `routes` folder containing two router modules:
+First, make`routes` folder containing three router modules:
 
 - **AppRouter.js**: Great for defining general purpose routes, e.g., the root route. We can export all our individual routes into an index file and export the index to our Server.js file, like we did with controllers
 
-- **UserRouter.js**: An example of a router dedicated to a _data resource_, in this case, _users_.
-Note how routes are defined on those two `router` objects using `router.get()` method call just like we did previously with `app.get()`
+- **brandRouter.js**: An example of a router dedicated to a _data resource_, in this case, _brands_.
+- **productRouter.js:** Router for our product model
 
-Each `router` object has one route defined - compare those two routes, notice the **HTTP methods** and the **paths**?  They're the same - isn't that a problem?  Nope, they're not actually the same because of the way the routers are mounted in **server.js**...
 
 
 > **IMPORTANT KEY POINT:** The path specified in `app.use` is a **"starts with path"**. It is bound to the paths specified in the router object forming the **actual path**.
@@ -100,8 +99,8 @@ Let's say you have a `router` object that defines a route like this:
 ```js
 // routes/brands.js
 
-let express = require('express');
-let router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 router.get('/brands', (req, res) => {...
 ```
